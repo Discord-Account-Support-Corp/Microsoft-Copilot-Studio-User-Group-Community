@@ -5,17 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Microsoft Tech User Group</title>
 
-  <!-- Redirect to your group -->
-  <meta http-equiv="refresh" content="0;url=https://techcommunity.microsoft.com/group/copilot-studio-community-hub">
-
   <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0078D7">
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: sans-serif;
+    }
+    header {
+      background-color: #0078D7;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    iframe {
+      width: 100%;
+      height: calc(100% - 60px);
+      border: none;
+    }
+  </style>
 </head>
 <body>
-  <p>Redirecting to Microsoft Tech User Group… <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub">Click here if not redirected</a></p>
+  <header>
+    Microsoft Tech User Group
+  </header>
+
+  <!-- Embed Microsoft Tech Group in iframe -->
+  <iframe src="https://techcommunity.microsoft.com/group/copilot-studio-community-hub"></iframe>
 
   <script>
-    // Register service worker for caching the shell
+    // Register service worker for caching the PWA shell
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
         .then(() => console.log('Service Worker Registered'))
