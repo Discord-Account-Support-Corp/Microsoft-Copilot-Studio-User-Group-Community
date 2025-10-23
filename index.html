@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Microsoft Tech User Group</title>
+  <title>Copilot Studio Community</title>
 
-  <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0078D7">
 
@@ -50,17 +49,16 @@
   </style>
 </head>
 <body>
-  <header>Microsoft Tech User Group</header>
+  <header>Copilot Studio Community</header>
 
   <main>
-    <p>Welcome! Visit our Microsoft Tech Community Group:</p>
+    <p>Tap the button below to visit our Microsoft Tech Community Group:</p>
     <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank" rel="noopener">
-      <button>Open Group</button>
+      <button>Open Community</button>
     </a>
   </main>
 
   <script>
-    // Register service worker for caching the PWA shell
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
         .then(() => console.log('Service Worker Registered'))
