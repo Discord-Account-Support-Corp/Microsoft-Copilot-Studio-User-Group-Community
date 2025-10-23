@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microsoft Tech User Group</title>
+
+  <!-- Redirect to your group -->
+  <meta http-equiv="refresh" content="0;url=https://techcommunity.microsoft.com/group/copilot-studio-community-hub">
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <p>Redirecting to Microsoft Tech User Group… <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub">Click here if not redirected</a></p>
+
+  <script>
+    // Register service worker for caching the shell
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker Registered'))
+        .catch(err => console.log('Service Worker Registration Failed', err));
+    }
+  </script>
+</body>
+</html>
