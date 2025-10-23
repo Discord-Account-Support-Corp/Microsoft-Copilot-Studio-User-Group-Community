@@ -13,29 +13,51 @@
     body, html {
       margin: 0;
       padding: 0;
-      height: 100%;
       font-family: sans-serif;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #f4f4f4;
     }
     header {
+      width: 100%;
       background-color: #0078D7;
       color: white;
       padding: 1rem;
       text-align: center;
+      font-size: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    iframe {
-      width: 100%;
-      height: calc(100% - 60px);
+    main {
+      text-align: center;
+      margin-top: 50px;
+    }
+    button {
+      background-color: #0078D7;
+      color: white;
       border: none;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #005a9e;
     }
   </style>
 </head>
 <body>
-  <header>
-    Microsoft Tech User Group
-  </header>
+  <header>Microsoft Tech User Group</header>
 
-  <!-- Embed Microsoft Tech Group in iframe -->
-  <iframe src="https://techcommunity.microsoft.com/group/copilot-studio-community-hub"></iframe>
+  <main>
+    <p>Welcome! Visit our Microsoft Tech Community Group:</p>
+    <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank" rel="noopener">
+      <button>Open Group</button>
+    </a>
+  </main>
 
   <script>
     // Register service worker for caching the PWA shell
