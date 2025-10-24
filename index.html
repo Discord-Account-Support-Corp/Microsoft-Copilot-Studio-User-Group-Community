@@ -56,32 +56,34 @@
   <button id="openCommunity">Open Copilot Studio User Group</button>
 
   <script>
-    // Countdown timer for automatic redirect
-    const countdownEl = document.getElementById('countdown');
-    let countdown = 30; // seconds
+    window.addEventListener('load', () => {
+      // Countdown timer for automatic redirect
+      const countdownEl = document.getElementById('countdown');
+      let countdown = 30; // seconds
 
-    const interval = setInterval(() => {
-      countdown--;
-      countdownEl.textContent = countdown;
+      const interval = setInterval(() => {
+        countdown--;
+        countdownEl.textContent = countdown;
 
-      if (countdown <= 0) {
-        clearInterval(interval);
-        // Redirect current tab to the user group
+        if (countdown <= 0) {
+          clearInterval(interval);
+          // Redirect current tab to the user group
+          window.location.href = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
+        }
+      }, 1000);
+
+      // Button click redirects immediately
+      document.getElementById('openCommunity').addEventListener('click', () => {
         window.location.href = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
+      });
+
+      // Register the service worker after page load
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+          .then(() => console.log('Service Worker Registered'))
+          .catch(err => console.error('Service Worker Registration Failed:', err));
       }
-    }, 1000);
-
-    // Button click redirects immediately
-    document.getElementById('openCommunity').addEventListener('click', () => {
-      window.location.href = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
     });
-
-    // Register the service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js')
-        .then(() => console.log('Service Worker Registered'))
-        .catch(err => console.log('Service Worker Registration Failed', err));
-    }
   </script>
 </body>
 </html>
