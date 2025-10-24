@@ -1,5 +1,5 @@
 const CACHE_NAME = 'tech-ug-cache-v1';
-const urlsToCache = [
+const urlsToCache = [https://techcommunity.microsoft.com/group/copilot-studio-community-hub
   '/',
   '/index.html',
   '/manifest.json',
