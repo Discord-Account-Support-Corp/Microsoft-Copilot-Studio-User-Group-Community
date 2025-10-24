@@ -1,69 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Copilot Studio Community</title>
+<p>You will be redirected to the Microsoft Tech Community in <span id="countdown">30</span> seconds.</p>
+<p>If not redirected, click the button below:</p>
 
-  <!-- Redirect after 2 seconds -->
-  <meta http-equiv="refresh" content="2;url=https://techcommunity.microsoft.com/group/copilot-studio-community-hub">
+<button id="openCommunity">Open Copilot Studio User Group</button>
 
-  <!-- PWA manifest -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0078D7">
+<script>
+  const countdownEl = document.getElementById('countdown');
+  let countdown = 30; // seconds
 
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: #f4f4f4;
-      text-align: center;
-    }
-    header {
-      background-color: #0078D7;
-      color: white;
-      width: 100%;
-      padding: 1rem;
-      font-size: 1.5rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    button {
-      background-color: #0078D7;
-      color: white;
-      border: none;
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
-      margin-top: 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background-color: #005a9e;
-    }
-  </style>
-</head>
-<body>
-  <header>Copilot Studio Community</header>
+  // Update the countdown every second
+  const interval = setInterval(() => {
+    countdown--;
+    countdownEl.textContent = countdown;
 
-  <p>Redirecting to Microsoft Tech Community…</p>
-  <p>If not redirected, click the button below:</p>
-  <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank" rel="noopener">
-    <button>Open Community</button>
-  </a>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log('Service Worker Registered'))
-        .catch(err => console.log('Service Worker Registration Failed', err));
+    if (countdown <= 0) {
+      clearInterval(interval);
+      // Redirect the current tab to the user group
+      window.location.href = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
     }
-  </script>
-</body>
-</html>
+  }, 1000);
+
+  // Button click opens the user group immediately
+  document.getElementById('openCommunity').addEventListener('click', () => {
+    window.location.href = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
+  });
+</script>
