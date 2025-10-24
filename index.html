@@ -1,15 +1,88 @@
-<button id="openCommunity">Open Copilot Studio User Group</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copilot Studio Community Hub</title>
 
-<script>
-  const url = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
+  <!-- PWA manifest -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#0078D7">
 
-  // Button click
-  document.getElementById('openCommunity').addEventListener('click', () => {
-    window.open(url, '_blank'); // opens new tab
-  });
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: #f4f4f4;
+      text-align: center;
+    }
+    header {
+      background-color: #0078D7;
+      color: white;
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
+    }
+    button {
+      background-color: #0078D7;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      margin-top: 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background-color: #005a9e;
+    }
+  </style>
+</head>
+<body>
+  <header>Copilot Studio Community Hub</header>
 
-  // Automatic timer after 30 seconds
-  setTimeout(() => {
-    window.open(url, '_blank'); // opens new tab
-  }, 30000);
-</script>
+  <p>You will be redirected to the Microsoft Tech Community in <span id="countdown">30</span> seconds.</p>
+  <p>If not redirected, click the button below:</p>
+
+  <button id="openCommunity">Open Copilot Studio User Group</button>
+
+  <script>
+    window.addEventListener('load', () => {
+      const url = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
+      const countdownEl = document.getElementById('countdown');
+      let countdown = 30;
+
+      // Countdown timer
+      const interval = setInterval(() => {
+        countdown--;
+        countdownEl.textContent = countdown;
+        if (countdown <= 0) {
+          clearInterval(interval);
+          window.open(url, '_blank'); // opens new tab
+        }
+      }, 1000);
+
+      // Button click
+      document.getElementById('openCommunity').addEventListener('click', () => {
+        window.open(url, '_blank'); // opens new tab
+      });
+
+      // Register service worker after load
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+          .then(() => console.log('Service Worker Registered'))
+          .catch(err => console.error('SW Registration Failed:', err));
+      }
+    });
+  </script>
+</body>
+</html>
