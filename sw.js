@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tech-ug-cache-v2';
+const CACHE_NAME = 'copilot-hub-cache-v1';
 const urlsToCache = [
   './',
   './index.html',
@@ -9,9 +9,7 @@ const urlsToCache = [
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
-      .then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)).then(() => self.skipWaiting())
   );
 });
 
@@ -24,10 +22,10 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // only handle same-origin requests
   if (!event.request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
-    caches.match(event.request).then(r => r || fetch(event.request).catch(() => caches.match('./index.html')))
+    caches.match(event.request)
+      .then(response => response || fetch(event.request).catch(() => caches.match('./index.html')))
   );
 });
