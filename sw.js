@@ -1,16 +1,20 @@
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open('pwa-cache').then(cache => cache.addAll([
-      '/index.html',
-      '/icons/placeholder.png'
-    ]))
+const CACHE_NAME = 'tech-ug-cache-v1';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
 });
 
-self.addEventListener('fetch', e => {
-  // Only handle requests to your own site
-  if (e.request.url.startsWith(self.location.origin)) {
-    e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
-  }
-  // External requests (like Microsoft Tech Community) are ignored
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(response => response || fetch(event.request))
+  );
 });
