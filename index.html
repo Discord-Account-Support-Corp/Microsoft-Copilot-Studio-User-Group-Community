@@ -16,55 +16,43 @@
       text-align: center;
       background: #f4f4f4;
       color: #333;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
     h1 {
       color: #0078D7;
-    }
-    button {
-      padding: 12px 24px;
-      background: #0078D7;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #005a9e;
+      font-size: 1.5em;
+      margin-bottom: 0.5em;
     }
     p {
-      margin-top: 1em;
+      font-size: 1em;
+      color: #555;
     }
   </style>
 </head>
 <body>
   <h1>Copilot Studio Community</h1>
-  <p>This app will redirect you to the official Microsoft Tech Community group.</p>
-  
-  <button onclick="openCommunity()">Open Now</button>
-  <p>If you are not redirected, 
-    <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank">
-      click here
-    </a>.
-  </p>
+  <p>Loading your Microsoft Tech Community group...</p>
 
   <script>
-    function openCommunity() {
-      window.location.href = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
-    }
+    const url = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
 
-    // If installed as a PWA, auto-redirect after 3 seconds
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setTimeout(openCommunity, 3000);
-    }
+    // Give the browser a short moment to render the page, then redirect
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        window.location.replace(url);
+      }, 1000); // short delay prevents blank screen on slower devices
 
-    // Register service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log('Service Worker Registered'))
-        .catch(err => console.warn('SW registration failed:', err));
-    }
+      // Register service worker for PWA functionality
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+          .then(() => console.log('Service Worker Registered'))
+          .catch(err => console.warn('SW registration failed:', err));
+      }
+    });
   </script>
 </body>
 </html>
