@@ -48,27 +48,17 @@
 </head>
 <body>
   <header>Copilot Studio Community</header>
-  <p id="message">You will be redirected in <span id="countdown">30</span> seconds...</p>
+
+  <p>Welcome to the Copilot Studio User Group Hub!</p>
+  <p>Click below to open the official Microsoft Tech Community page.</p>
+  
   <button id="openCommunity">Open Copilot Studio User Group</button>
 
   <script>
-    // Wait until the page has fully loaded before running scripts
     window.addEventListener('load', () => {
-      const countdownEl = document.getElementById('countdown');
       const url = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
-      let countdown = 30;
-
-      // Countdown timer
-      const interval = setInterval(() => {
-        countdown--;
-        countdownEl.textContent = countdown;
-        if (countdown <= 0) {
-          clearInterval(interval);
-          window.open(url, '_blank'); // open in new tab
-        }
-      }, 1000);
-
-      // Button click: open immediately
+      
+      // Button click: open in a new tab
       document.getElementById('openCommunity').addEventListener('click', () => {
         window.open(url, '_blank');
       });
