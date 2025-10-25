@@ -2,52 +2,76 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Copilot Studio Community</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- PWA setup -->
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0078D7" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
   <style>
     body {
       font-family: system-ui, sans-serif;
-      padding: 2em;
-      text-align: center;
-      background: #f4f4f4;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      margin: 0;
       height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      background: #f3f3f3;
+      color: #333;
+      text-align: center;
     }
-    h1 { color: #0078D7; margin-bottom: 0.5em; }
-    p { font-size: 1em; color: #555; }
+    h1 {
+      color: #0078D7;
+      margin-bottom: 0.5em;
+    }
+    p {
+      margin: 0.5em 0;
+      font-size: 1em;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #ddd;
+      border-top: 4px solid #0078D7;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-top: 1em;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
   <h1>Copilot Studio Community</h1>
-  <p>Opening your Microsoft Tech Community group in a new tab...</p>
+  <p>Opening your Microsoft Tech Community group...</p>
+  <div class="spinner"></div>
+  <p>If it doesn’t open automatically, <a id="manualLink" href="#">click here</a>.</p>
 
   <script>
-    const url = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
+    const groupURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
 
+    // Register the service worker for installability
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('[PWA] Service Worker Registered'))
+        .catch(err => console.warn('[PWA] SW registration failed:', err));
+    }
+
+    // Attempt to open your Microsoft Tech Community in a new tab
     window.addEventListener('load', () => {
-      // Open Microsoft Tech Community in a new tab
-      const newTab = window.open(url, '_blank');
+      const newTab = window.open(groupURL, '_blank');
+      const manualLink = document.getElementById('manualLink');
+      manualLink.href = groupURL;
 
-      // Register service worker for installability
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-          .then(() => console.log('Service Worker Registered'))
-          .catch(err => console.warn('SW registration failed:', err));
-      }
-
-      // If popup was blocked, show a message
       if (!newTab) {
-        document.body.innerHTML += `
-          <p>Please <a href="${url}" target="_blank">click here</a> to open your user group.</p>
-        `;
+        // Popup was blocked
+        document.body.innerHTML += `<p>Please <a href="${groupURL}" target="_blank">click here</a> to open your group.</p>`;
       }
     });
   </script>
