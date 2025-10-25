@@ -2,74 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Copilot Studio Community</title>
-
-  <!-- PWA -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0078D7" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
 
   <style>
     body {
-      margin: 0;
       font-family: system-ui, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: #f4f4f4;
+      padding: 2em;
       text-align: center;
+      background: #f4f4f4;
       color: #333;
     }
-    header {
-      background: #0078d7;
-      color: white;
-      width: 100%;
-      padding: 1rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-      font-size: 1.5rem;
+    h1 {
+      color: #0078D7;
     }
     button {
-      background-color: #0078d7;
-      color: white;
+      padding: 12px 24px;
+      background: #0078D7;
+      color: #fff;
       border: none;
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      margin-top: 20px;
-      border-radius: 4px;
+      border-radius: 6px;
+      font-size: 16px;
       cursor: pointer;
       transition: background 0.3s;
     }
     button:hover {
-      background-color: #005a9e;
+      background: #005a9e;
+    }
+    p {
+      margin-top: 1em;
     }
   </style>
 </head>
 <body>
-  <header>Copilot Studio Community</header>
-
-  <p>Welcome to the Copilot Studio User Group Hub!</p>
-  <p>Click below to open the official Microsoft Tech Community page.</p>
+  <h1>Copilot Studio Community</h1>
+  <p>This app will redirect you to the official Microsoft Tech Community group.</p>
   
-  <button id="openCommunity">Open Copilot Studio User Group</button>
+  <button onclick="openCommunity()">Open Now</button>
+  <p>If you are not redirected, 
+    <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank">
+      click here
+    </a>.
+  </p>
 
   <script>
-    window.addEventListener('load', () => {
-      const url = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
-      
-      // Button click: open in a new tab
-      document.getElementById('openCommunity').addEventListener('click', () => {
-        window.open(url, '_blank');
-      });
+    function openCommunity() {
+      window.location.href = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
+    }
 
-      // Register service worker safely
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-          .then(() => console.log('Service Worker Registered'))
-          .catch(err => console.warn('SW registration failed:', err));
-      }
-    });
+    // If installed as a PWA, auto-redirect after 3 seconds
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setTimeout(openCommunity, 3000);
+    }
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker Registered'))
+        .catch(err => console.warn('SW registration failed:', err));
+    }
   </script>
 </body>
 </html>
