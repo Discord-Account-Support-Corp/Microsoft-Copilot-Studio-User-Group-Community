@@ -8,7 +8,6 @@
   <meta name="theme-color" content="#0078D7" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
-
   <style>
     body {
       font-family: system-ui, sans-serif;
@@ -22,35 +21,33 @@
       align-items: center;
       height: 100vh;
     }
-    h1 {
-      color: #0078D7;
-      font-size: 1.5em;
-      margin-bottom: 0.5em;
-    }
-    p {
-      font-size: 1em;
-      color: #555;
-    }
+    h1 { color: #0078D7; margin-bottom: 0.5em; }
+    p { font-size: 1em; color: #555; }
   </style>
 </head>
 <body>
   <h1>Copilot Studio Community</h1>
-  <p>Loading your Microsoft Tech Community group...</p>
+  <p>Opening your Microsoft Tech Community group in a new tab...</p>
 
   <script>
     const url = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
 
-    // Give the browser a short moment to render the page, then redirect
     window.addEventListener('load', () => {
-      setTimeout(() => {
-        window.location.replace(url);
-      }, 1000); // short delay prevents blank screen on slower devices
+      // Open Microsoft Tech Community in a new tab
+      const newTab = window.open(url, '_blank');
 
-      // Register service worker for PWA functionality
+      // Register service worker for installability
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js')
           .then(() => console.log('Service Worker Registered'))
           .catch(err => console.warn('SW registration failed:', err));
+      }
+
+      // If popup was blocked, show a message
+      if (!newTab) {
+        document.body.innerHTML += `
+          <p>Please <a href="${url}" target="_blank">click here</a> to open your user group.</p>
+        `;
       }
     });
   </script>
