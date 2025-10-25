@@ -1,4 +1,4 @@
-const CACHE_NAME = 'copilot-hub-cache-v1';
+const CACHE_NAME = 'copilot-hub-cache-v3';
 const urlsToCache = [
   './',
   './index.html',
@@ -7,25 +7,55 @@ const urlsToCache = [
   './icons/icon-512.png'
 ];
 
+// Install: cache core files
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then(cache => {
+      console.log('[SW] Caching new version...');
+      return cache.addAll(urlsToCache);
+    })
   );
+  self.skipWaiting();
 });
 
+// Activate: remove old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => {
+            console.log('[SW] Deleting old cache:', key);
+            return caches.delete(key);
+          })
+      );
+    })
   );
+  self.clients.claim();
 });
 
+// Fetch: serve from cache, but always update in background
 self.addEventListener('fetch', event => {
-  if (!event.request.url.startsWith(self.location.origin)) return;
+  const requestURL = new URL(event.request.url);
 
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request).catch(() => caches.match('./index.html')))
-  );
+  // Only handle requests to your domain (GitHub Pages)
+  if (requestURL.origin === location.origin) {
+    event.respondWith(
+      caches.match(event.request).then(cachedResponse => {
+        const fetchPromise = fetch(event.request)
+          .then(networkResponse => {
+            if (networkResponse && networkResponse.status === 200) {
+              caches.open(CACHE_NAME).then(cache => {
+                cache.put(event.request, networkResponse.clone());
+              });
+            }
+            return networkResponse;
+          })
+          .catch(() => cachedResponse || caches.match('./index.html'));
+
+        return cachedResponse || fetchPromise;
+      })
+    );
+  }
 });
