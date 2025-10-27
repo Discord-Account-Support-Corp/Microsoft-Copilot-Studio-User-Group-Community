@@ -1,37 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Copilot Studio Community</title>
-
-  <!-- PWA setup -->
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0078D7" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
-
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0078D7">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <style>
     body {
       font-family: system-ui, sans-serif;
-      margin: 0;
-      height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       flex-direction: column;
-      background: #f3f3f3;
-      color: #333;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
       text-align: center;
     }
-    h1 {
-      color: #0078D7;
-      margin-bottom: 0.5em;
-    }
-    p {
-      margin: 0.5em 0;
-      font-size: 1em;
-    }
+    h1 { color: #0078D7; margin-bottom: 0.5em; }
     .spinner {
       width: 40px;
       height: 40px;
@@ -39,40 +27,40 @@
       border-top: 4px solid #0078D7;
       border-radius: 50%;
       animation: spin 1s linear infinite;
-      margin-top: 1em;
+      margin: 1em 0;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    button { padding: 12px 24px; background: #0078D7; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
   </style>
 </head>
 <body>
   <h1>Copilot Studio Community</h1>
-  <p>Opening your Microsoft Tech Community group...</p>
   <div class="spinner"></div>
-  <p>If it doesn’t open automatically, <a id="manualLink" href="#">click here</a>.</p>
+  <p>Opening Microsoft Tech Community...</p>
+  <button id="openCommunity" style="display:none;">Open Now</button>
 
   <script>
     const groupURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
 
-    // Register the service worker for installability
+    // Register SW
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
-        .then(() => console.log('[PWA] Service Worker Registered'))
-        .catch(err => console.warn('[PWA] SW registration failed:', err));
+        .then(() => console.log('Service Worker Registered'))
+        .catch(err => console.warn('SW registration failed:', err));
     }
 
-    // Attempt to open your Microsoft Tech Community in a new tab
+    // Delay slightly to let page render
     window.addEventListener('load', () => {
-      const newTab = window.open(groupURL, '_blank');
-      const manualLink = document.getElementById('manualLink');
-      manualLink.href = groupURL;
+      setTimeout(() => {
+        const newTab = window.open(groupURL, '_blank');
+        if (!newTab) {
+          document.getElementById('openCommunity').style.display = 'inline-block';
+        }
+      }, 100); // 100ms delay to render page before redirect
+    });
 
-      if (!newTab) {
-        // Popup was blocked
-        document.body.innerHTML += `<p>Please <a href="${groupURL}" target="_blank">click here</a> to open your group.</p>`;
-      }
+    // Fallback button
+    document.getElementById('openCommunity').addEventListener('click', () => {
+      window.open(groupURL, '_blank');
     });
   </script>
 </body>
