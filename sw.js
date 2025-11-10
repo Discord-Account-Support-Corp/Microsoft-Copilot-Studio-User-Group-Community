@@ -1,35 +1,43 @@
-const CACHE_NAME = 'copilot-hub-cache-v5';
-const urlsToCache = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icons/icon-192.png',
-  './icons/icon-512.png'
+// sw.js — Safe, minimal service worker for your PWA shell
+
+const CACHE_NAME = 'copilot-studio-shell-v1';
+const SHELL_FILES = [
+  '/',                  // index.html
+  '/manifest.json',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png'
 ];
 
-// Install: cache app shell
+// Install – cache local PWA shell
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(SHELL_FILES))
   );
   self.skipWaiting();
 });
 
-// Activate: remove old caches
+// Activate – remove old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(key => key !== CACHE_NAME).map(k => caches.delete(k)))
+      Promise.all(
+        keys.map(key => key !== CACHE_NAME && caches.delete(key))
+      )
     )
   );
   self.clients.claim();
 });
 
-// Fetch: serve cache first
+// Fetch – serve cached shell, fallback to network for everything else
 self.addEventListener('fetch', event => {
-  if (!event.request.url.startsWith(self.location.origin)) return;
+  const request = event.request;
+
+  // NEVER try to cache the external user group URL
+  if (request.url.startsWith('https://techcommunity.microsoft.com/')) return;
 
   event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request).catch(() => caches.match('./index.html')))
+    caches.match(request).then(response => {
+      return response || fetch(request).catch(() => caches.match('/index.html'));
+    })
   );
 });
