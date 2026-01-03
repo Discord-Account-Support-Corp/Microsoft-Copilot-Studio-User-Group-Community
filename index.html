@@ -38,6 +38,7 @@
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      margin-top: 1rem;
     }
     @keyframes spin {
       0% { transform: rotate(0deg); }
@@ -55,7 +56,10 @@
     const groupURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
     const countdownEl = document.getElementById('countdown');
     const button = document.getElementById('openCommunity');
-    let countdown = 90; // seconds
+    let countdown = 90; // start at 90 seconds
+
+    // Show initial countdown immediately
+    countdownEl.textContent = countdown;
 
     // Register service worker
     if ('serviceWorker' in navigator) {
@@ -66,15 +70,17 @@
 
     // Countdown timer
     const timer = setInterval(() => {
-      countdown--;
+      countdown--; // decrease by 1 each second
       countdownEl.textContent = countdown;
+
       if (countdown <= 0) {
         clearInterval(timer);
-        window.location.href = groupURL; // redirect after countdown
+        // Redirect after full countdown
+        window.location.href = groupURL;
       }
     }, 1000);
 
-    // Show fallback button immediately
+    // Fallback button always visible
     button.style.display = 'inline-block';
     button.addEventListener('click', () => {
       window.location.href = groupURL;
