@@ -1,67 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Copilot Studio Community</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0078D7">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      height: 100vh;
-      margin: 0;
-      background-color: #f4f4f4;
-      text-align: center;
-    }
-    h1 { color: #0078D7; margin-bottom: 0.5em; }
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid #ddd;
-      border-top: 4px solid #0078D7;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 1em 0;
-    }
-    button { padding: 12px 24px; background: #0078D7; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
-  </style>
-</head>
-<body>
-  <h1>Copilot Studio Community</h1>
-  <div class="spinner"></div>
-  <p>Opening Microsoft Tech Community...</p>
-  <button id="openCommunity" style="display:none;">Open Now</button>
+const groupURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
 
-  <script>
-    const groupURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
+function openGroup() {
+  const newTab = window.open(groupURL, '_blank');
+  if (!newTab) {
+    // Pop-up blocked — show fallback button
+    document.querySelector('.spinner').style.display = 'none';
+    document.querySelector('p').textContent = 'Tap below to open the community:';
+    document.getElementById('openCommunity').style.display = 'inline-block';
+  } else {
+    // Opened successfully — hide spinner
+    document.querySelector('.spinner').style.display = 'none';
+    document.querySelector('p').textContent = 'Opening your community...';
+  }
+}
 
-    // Register SW
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log('Service Worker Registered'))
-        .catch(err => console.warn('SW registration failed:', err));
-    }
+window.addEventListener('load', () => {
+  // Delay slightly to ensure the page is painted before trying to open
+  setTimeout(openGroup, 500);
+});
 
-    // Delay slightly to let page render
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const newTab = window.open(groupURL, '_blank');
-        if (!newTab) {
-          document.getElementById('openCommunity').style.display = 'inline-block';
-        }
-      }, 100); // 100ms delay to render page before redirect
-    });
-
-    // Fallback button
-    document.getElementById('openCommunity').addEventListener('click', () => {
-      window.open(groupURL, '_blank');
-    });
-  </script>
-</body>
-</html>
+document.getElementById('openCommunity').addEventListener('click', openGroup);
