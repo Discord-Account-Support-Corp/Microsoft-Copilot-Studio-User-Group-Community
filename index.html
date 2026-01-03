@@ -3,24 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Microsoft Tech User Group</title>
-
-  <!-- Redirect to your group -->
-  <meta http-equiv="refresh" content="0;url=https://techcommunity.microsoft.com/group/copilot-studio-community-hub">
-
-  <!-- PWA manifest -->
+  <title>Copilot Studio Community</title>
   <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0078D7">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100vh;
+      margin: 0;
+      background: #f4f4f4;
+    }
+    h1 { color: #0078D7; margin-bottom: 1rem; }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #ddd;
+      border-top: 4px solid #0078D7;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 1rem 0;
+    }
+    button {
+      display: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      background: #0078D7;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-  <p>Redirecting to Microsoft Tech User Group… <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub">Click here if not redirected</a></p>
+  <h1>Copilot Studio Community</h1>
+  <div class="spinner"></div>
+  <p>Redirecting in <span id="countdown">90</span> seconds...</p>
+  <button id="openCommunity">Click here if not redirected</button>
 
   <script>
-    // Register service worker for caching the shell
+    const groupURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
+    const countdownEl = document.getElementById('countdown');
+    const button = document.getElementById('openCommunity');
+    let countdown = 90; // seconds
+
+    // Register service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js')
         .then(() => console.log('Service Worker Registered'))
-        .catch(err => console.log('Service Worker Registration Failed', err));
+        .catch(err => console.warn('SW registration failed:', err));
     }
+
+    // Countdown timer
+    const timer = setInterval(() => {
+      countdown--;
+      countdownEl.textContent = countdown;
+      if (countdown <= 0) {
+        clearInterval(timer);
+        window.location.href = groupURL; // redirect after countdown
+      }
+    }, 1000);
+
+    // Show fallback button immediately
+    button.style.display = 'inline-block';
+    button.addEventListener('click', () => {
+      window.location.href = groupURL;
+    });
   </script>
 </body>
 </html>
