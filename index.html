@@ -1,5 +1,3 @@
-const groupURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
-
 function openGroup() {
   const newTab = window.open(groupURL, '_blank');
   if (!newTab) {
@@ -13,10 +11,3 @@ function openGroup() {
     document.querySelector('p').textContent = 'Opening your community...';
   }
 }
-
-window.addEventListener('load', () => {
-  // Delay slightly to ensure the page is painted before trying to open
-  setTimeout(openGroup, 500);
-});
-
-document.getElementById('openCommunity').addEventListener('click', openGroup);
