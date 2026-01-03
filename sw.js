@@ -1,43 +1,20 @@
-// sw.js — Safe, minimal service worker for your PWA shell
+const groupURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
 
-const CACHE_NAME = 'copilot-studio-shell-v1';
-const SHELL_FILES = [
-  '/',                  // index.html
-  '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png'
-];
+function openGroup() {
+  const newTab = window.open(groupURL, '_blank');
 
-// Install – cache local PWA shell
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(SHELL_FILES))
-  );
-  self.skipWaiting();
-});
+  if (!newTab) {
+    // Pop-up blocked OR failed
+    document.querySelector('.spinner').style.display = 'none';
+    document.querySelector('p').textContent = 'Cannot open live group. Using fallback version:';
+    document.getElementById('openCommunity').style.display = 'inline-block';
 
-// Activate – remove old caches
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.map(key => key !== CACHE_NAME && caches.delete(key))
-      )
-    )
-  );
-  self.clients.claim();
-});
-
-// Fetch – serve cached shell, fallback to network for everything else
-self.addEventListener('fetch', event => {
-  const request = event.request;
-
-  // NEVER try to cache the external user group URL
-  if (request.url.startsWith('https://techcommunity.microsoft.com/')) return;
-
-  event.respondWith(
-    caches.match(request).then(response => {
-      return response || fetch(request).catch(() => caches.match('/index.html'));
-    })
-  );
-});
+    // Optionally, point the fallback button to a cached shell or local copy
+    document.getElementById('openCommunity').onclick = () => {
+      window.location.href = '/fallback.html'; // a local cached page you create
+    };
+  } else {
+    document.querySelector('.spinner').style.display = 'none';
+    document.querySelector('p').textContent = 'Opening your community...';
+  }
+}
