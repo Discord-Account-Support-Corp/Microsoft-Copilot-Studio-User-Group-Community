@@ -1,57 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Copilot Studio Community PWA</title>
-  <link rel="manifest" href="manifest.json" />
-  <script src="sw-register.js" defer></script>
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #f7f7f7;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-      margin: 0;
-      padding: 20px;
-    }
-    h1 { color: #0078D7; margin-bottom: 1rem; }
-    p { margin: 1rem 0; }
-    button {
-      padding: 16px 32px;
-      font-size: 1.25em;
-      background: #0078D7;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-    button:hover { background: #005a9e; }
-    a { color: #0078D7; text-decoration: none; font-weight: bold; }
-    a:hover { text-decoration: underline; }
-  </style>
-</head>
-<body>
-  <div>
-    <h1>📘 Copilot Studio Community</h1>
-    <p>Tap the button below to open your user group:</p>
-    <button id="openCommunity">Open Copilot Studio Community</button>
-    <p>If the button doesn't work, <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank">click here</a>.</p>
-    <p>Tip: Tap “Add to Home Screen” to install this app.</p>
-  </div>
+<button id="openCommunity">Open Copilot Studio Community</button>
+<p>If the button doesn't work, <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank" rel="noopener noreferrer">click here</a>.</p>
 
-  <script>
-    const groupURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
-    const button = document.getElementById("openCommunity");
+<script>
+  const groupURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
+  const button = document.getElementById("openCommunity");
 
-    button.addEventListener("click", () => {
-      // Directly navigate to your user group
-      window.location.href = groupURL;
-    });
-  </script>
-</body>
-</html>
+  button.addEventListener("click", () => {
+    // Open in a browser tab (safe for PWA)
+    window.open(groupURL, "_blank", "noopener,noreferrer");
+  });
+</script>
