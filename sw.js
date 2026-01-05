@@ -4,39 +4,32 @@ const OFFLINE_INDEX = '/index.html';
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE).then(cache =>
-      cache.add(OFFLINE_INDEX) // Cache index.html for offline fallback
+      cache.add(OFFLINE_INDEX) // only offline fallback
     )
   );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', event => {
-  event.waitUntil(self.clients.claim());
-});
+self.addEventListener('activate', event => self.clients.claim());
 
 self.addEventListener('fetch', event => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // 🚫 Never touch external origins (Copilot Studio untouched)
+  // Never touch external origins
   if (url.origin !== self.location.origin) return;
 
-  // ✅ Navigation: network-first, offline fallback
+  // Network-first navigation fallback
   if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req).catch(() =>
-        caches.open(CACHE).then(cache =>
-          cache.match(OFFLINE_INDEX)
-        )
+        caches.open(CACHE).then(cache => cache.match(OFFLINE_INDEX))
       )
     );
     return;
   }
 
-  // 🚫 Never cache HTML documents
-  if (req.headers.get('accept')?.includes('text/html')) return;
-
-  // ✅ Static assets only
+  // Only cache static assets (CSS, JS, images)
   if (url.pathname.match(/\.(css|js|png|jpg|svg|webp|woff2)$/)) {
     event.respondWith(
       caches.open(CACHE).then(cache =>
