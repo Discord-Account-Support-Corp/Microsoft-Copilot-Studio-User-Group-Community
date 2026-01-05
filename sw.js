@@ -1,56 +1,53 @@
-const CACHE_NAME = 'copilot-studio-pwa-v2';
-const APP_SHELL = [
-  '/',
-  '/index.html',
-  '/manifest.json'
-];
+const CACHE = 'copilot-user-group-nav-v1';
+const OFFLINE_INDEX = '/index.html';
 
-// Install: cache core app shell
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL))
+    caches.open(CACHE).then(cache =>
+      cache.add(OFFLINE_INDEX) // Cache index.html for offline fallback
+    )
   );
   self.skipWaiting();
 });
 
-// Activate: clean old caches
 self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
-      )
-    )
-  );
-  self.clients.claim();
+  event.waitUntil(self.clients.claim());
 });
 
-// Fetch: safety rails added
 self.addEventListener('fetch', event => {
-  const request = event.request;
-  const url = new URL(request.url);
+  const req = event.request;
+  const url = new URL(req.url);
 
-  // ❗ Never touch external sites (Microsoft Tech Community, etc.)
-  if (url.origin !== self.location.origin) {
-    return;
-  }
+  // 🚫 Never touch external origins (Copilot Studio untouched)
+  if (url.origin !== self.location.origin) return;
 
-  // ✅ SAFETY RAIL #1:
-  // Always serve index.html for navigation requests
-  // (prevents blank screens & stuck loading bars)
-  if (request.mode === 'navigate') {
+  // ✅ Navigation: network-first, offline fallback
+  if (req.mode === 'navigate') {
     event.respondWith(
-      caches.match('/index.html')
-        .then(response => response || fetch(request))
+      fetch(req).catch(() =>
+        caches.open(CACHE).then(cache =>
+          cache.match(OFFLINE_INDEX)
+        )
+      )
     );
     return;
   }
 
-  // ✅ SAFETY RAIL #2:
-  // Cache-first for all other same-origin requests
-  // Network fallback prevents frozen loads
-  event.respondWith(
-    caches.match(request)
-      .then(response => response || fetch(request))
-  );
+  // 🚫 Never cache HTML documents
+  if (req.headers.get('accept')?.includes('text/html')) return;
+
+  // ✅ Static assets only
+  if (url.pathname.match(/\.(css|js|png|jpg|svg|webp|woff2)$/)) {
+    event.respondWith(
+      caches.open(CACHE).then(cache =>
+        cache.match(req).then(cached =>
+          cached ||
+          fetch(req).then(res => {
+            cache.put(req, res.clone());
+            return res;
+          })
+        )
+      )
+    );
+  }
 });
