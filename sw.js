@@ -1,11 +1,11 @@
-const CACHE_NAME = 'copilot-studio-pwa-v1';
+const CACHE_NAME = 'copilot-studio-pwa-v2';
 const APP_SHELL = [
   '/',
   '/index.html',
   '/manifest.json'
 ];
 
-// Install: cache only local files
+// Install: cache core app shell
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL))
@@ -25,18 +25,32 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch: ONLY handle same-origin requests
+// Fetch: safety rails added
 self.addEventListener('fetch', event => {
-  const url = new URL(event.request.url);
+  const request = event.request;
+  const url = new URL(request.url);
 
-  // ❗ Never touch Microsoft Tech Community
+  // ❗ Never touch external sites (Microsoft Tech Community, etc.)
   if (url.origin !== self.location.origin) {
     return;
   }
 
+  // ✅ SAFETY RAIL #1:
+  // Always serve index.html for navigation requests
+  // (prevents blank screens & stuck loading bars)
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      caches.match('/index.html')
+        .then(response => response || fetch(request))
+    );
+    return;
+  }
+
+  // ✅ SAFETY RAIL #2:
+  // Cache-first for all other same-origin requests
+  // Network fallback prevents frozen loads
   event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
+    caches.match(request)
+      .then(response => response || fetch(request))
   );
 });
