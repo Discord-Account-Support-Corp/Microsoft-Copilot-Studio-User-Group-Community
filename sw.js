@@ -1,46 +1,53 @@
-const CACHE = 'copilot-user-group-nav-v1';
-const OFFLINE_INDEX = '/index.html';
+const CACHE_NAME = 'copilot-studio-pwa-v3';
 
+const APP_SHELL = [
+  '/',
+  '/index.html',
+  '/offline.html',
+  '/manifest.json'
+];
+
+// Install: cache local app shell only
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE).then(cache =>
-      cache.add(OFFLINE_INDEX) // only offline fallback
-    )
+    caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL))
   );
   self.skipWaiting();
 });
 
-self.addEventListener('activate', event => self.clients.claim());
-
-self.addEventListener('fetch', event => {
-  const req = event.request;
-  const url = new URL(req.url);
-
-  // Never touch external origins
-  if (url.origin !== self.location.origin) return;
-
-  // Network-first navigation fallback
-  if (req.mode === 'navigate') {
-    event.respondWith(
-      fetch(req).catch(() =>
-        caches.open(CACHE).then(cache => cache.match(OFFLINE_INDEX))
+// Activate: clean old caches
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
       )
-    );
+    )
+  );
+  self.clients.claim();
+});
+
+// Fetch: network-first for same-origin, offline fallback
+self.addEventListener('fetch', event => {
+  const url = new URL(event.request.url);
+
+  // 🚫 Never touch external domains (critical)
+  if (url.origin !== self.location.origin) {
     return;
   }
 
-  // Only cache static assets (CSS, JS, images)
-  if (url.pathname.match(/\.(css|js|png|jpg|svg|webp|woff2)$/)) {
-    event.respondWith(
-      caches.open(CACHE).then(cache =>
-        cache.match(req).then(cached =>
-          cached ||
-          fetch(req).then(res => {
-            cache.put(req, res.clone());
-            return res;
-          })
+  event.respondWith(
+    fetch(event.request)
+      .then(response => {
+        // Update cache silently
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+        return response;
+      })
+      .catch(() =>
+        caches.match(event.request).then(
+          response => response || caches.match('/offline.html')
         )
       )
-    );
-  }
+  );
 });
