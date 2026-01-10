@@ -6,4 +6,4 @@ self.addEventListener('activate', () => {
   self.clients.claim();
 });
 
-// No fetch handler on purpose
+// Intentionally NO fetch handler
