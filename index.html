@@ -40,20 +40,36 @@
 
   <button id="openBtn">Open Now</button>
 
-  <script>
-    // Navigate to internal redirect page
-    document.getElementById('openBtn').addEventListener('click', () => {
-      window.location.href = 'redirect.html';
-    });
+  <p>If it doesn’t open automatically, <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank" rel="noopener noreferrer">click here</a>.</p>
 
-    // Optional: auto-launch in standalone PWA
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setTimeout(() => window.location.href = 'redirect.html', 1500);
+  <script>
+    const hubURL = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
+
+    function openCommunity() {
+      // Open in new tab
+      const newTab = window.open(hubURL, '_blank', 'noopener,noreferrer');
+      // Fallback for standalone PWA
+      if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
+        window.location.href = hubURL;
+      }
     }
 
-    // Register minimal service worker
+    document.getElementById('openBtn').addEventListener('click', openCommunity);
+
+    // Auto-launch in standalone PWA after 1.5s
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setTimeout(openCommunity, 1500);
+    }
+
+    // --- Built-in Service Worker Unregister + Register ---
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
+      // Unregister any old SW first
+      navigator.serviceWorker.getRegistrations().then(regs =>
+        regs.forEach(reg => reg.unregister())
+      ).finally(() => {
+        // Register the new minimal SW
+        navigator.serviceWorker.register('sw.js');
+      });
     }
   </script>
 </body>
