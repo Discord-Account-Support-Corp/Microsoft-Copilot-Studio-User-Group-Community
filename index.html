@@ -5,10 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Copilot Studio Community</title>
 
+  <!-- Manifest -->
   <link rel="manifest" href="manifest.json" />
+
+  <!-- Theme color for splash -->
   <meta name="theme-color" content="#f7f7f7" />
+
+  <!-- App icon -->
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
 
+  <!-- Inline minimal CSS -->
   <style>
     body {
       font-family: system-ui, sans-serif;
@@ -34,7 +40,7 @@
 </head>
 
 <body>
-  <!-- Button directly opens the community link in a new tab -->
+  <!-- Splash button -->
   <button onclick="window.open(
       'https://techcommunity.microsoft.com/group/copilot-studio-community-hub',
       '_blank',
@@ -43,8 +49,8 @@
     Open Copilot Studio Community
   </button>
 
+  <!-- Minimal Service Worker registration -->
   <script>
-    // Register minimal Service Worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     }
