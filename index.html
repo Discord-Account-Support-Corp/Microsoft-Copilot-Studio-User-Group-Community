@@ -36,18 +36,18 @@
 <body>
   <h1>Copilot Studio Community</h1>
   <p>This app will redirect you to the Copilot Studio User Group hub.</p>
-  
-  <button onclick="window.open(
-      'https://techcommunity.microsoft.com/group/copilot-studio-community-hub',
-      '_blank',
-      'noopener,noreferrer'
-    )">
-    Open Now
-  </button>
-  
+
+  <button id="openBtn">Open Now</button>
+
   <p>If it doesn’t open, <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank" rel="noopener noreferrer">click here</a>.</p>
 
   <script>
+    document.getElementById('openBtn').addEventListener('click', () => {
+      // Top-level redirect avoids white screen in standalone PWA
+      window.top.location.href = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
+    });
+
+    // Register minimal Service Worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     }
