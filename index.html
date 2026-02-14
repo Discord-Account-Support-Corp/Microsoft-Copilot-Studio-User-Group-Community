@@ -31,20 +31,26 @@
       cursor: pointer;
     }
 
-    a {
-      text-decoration: none;
+    button:active {
+      transform: scale(0.98);
     }
   </style>
 </head>
 
 <body>
-  <a
-    href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub"
-    rel="noopener noreferrer"
-  >
-    <button>
-      Open Copilot Studio Community
-    </button>
-  </a>
+  <button onclick="openCommunity()">
+    Open Copilot Studio Community
+  </button>
+
+  <script>
+    function openCommunity() {
+      window.location.href =
+        "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
 </body>
 </html>
