@@ -12,14 +12,13 @@
     body {
       font-family: system-ui, sans-serif;
       background: #f7f7f7;
-      padding: 2em;
-      text-align: center;
-      height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      height: 100vh;
       margin: 0;
+      text-align: center;
     }
     button {
       padding: 16px 32px;
@@ -30,37 +29,25 @@
       font-size: 16px;
       cursor: pointer;
     }
-    button:active {
-      transform: scale(0.98);
-    }
-    p {
-      margin-top: 1em;
-    }
+    button:active { transform: scale(0.98); }
+    p { margin-top: 1em; }
   </style>
 </head>
 <body>
   <h1>Copilot Studio Community</h1>
   <p>This app will redirect you to the Copilot Studio User Group hub.</p>
   
-  <button onclick="openCommunity()">Open Now</button>
+  <button onclick="window.open(
+      'https://techcommunity.microsoft.com/group/copilot-studio-community-hub',
+      '_blank',
+      'noopener,noreferrer'
+    )">
+    Open Now
+  </button>
   
   <p>If it doesn’t open, <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank" rel="noopener noreferrer">click here</a>.</p>
 
   <script>
-    function openCommunity() {
-      window.open(
-        "https://techcommunity.microsoft.com/group/copilot-studio-community-hub",
-        "_blank",
-        "noopener,noreferrer"
-      );
-    }
-
-    // Optional auto-redirect if running as standalone
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setTimeout(openCommunity, 3000);
-    }
-
-    // Minimal Service Worker registration
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     }
