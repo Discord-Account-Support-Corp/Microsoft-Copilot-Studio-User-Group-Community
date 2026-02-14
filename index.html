@@ -14,7 +14,7 @@
   <!-- App icon -->
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
 
-  <!-- Inline minimal CSS -->
+  <!-- Inline CSS -->
   <style>
     body {
       font-family: system-ui, sans-serif;
@@ -34,13 +34,20 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      z-index: 1;
+      position: relative;
     }
     button:active { transform: scale(0.98); }
   </style>
 </head>
 
 <body>
-  <!-- Splash button -->
+  <!-- Splash div visible immediately -->
+  <div id="splash" style="background:#f7f7f7; position:absolute; top:0; left:0; width:100%; height:100%; display:flex; justify-content:center; align-items:center; z-index:10;">
+    <p style="font-size:1.2em; color:#0078D7;">Loading Copilot Studio…</p>
+  </div>
+
+  <!-- Button opens Copilot Studio Community -->
   <button onclick="window.open(
       'https://techcommunity.microsoft.com/group/copilot-studio-community-hub',
       '_blank',
@@ -49,8 +56,15 @@
     Open Copilot Studio Community
   </button>
 
-  <!-- Minimal Service Worker registration -->
+  <!-- Scripts -->
   <script>
+    // Hide splash immediately after page loads
+    window.addEventListener('load', () => {
+      const splash = document.getElementById('splash');
+      if (splash) splash.style.display = 'none';
+    });
+
+    // Register minimal Service Worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     }
