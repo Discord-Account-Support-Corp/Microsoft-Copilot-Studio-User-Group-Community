@@ -2,69 +2,65 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Copilot Studio Splash</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Copilot Studio Community</title>
-
-  <!-- Manifest -->
   <link rel="manifest" href="manifest.json" />
-
-  <!-- Theme color for splash -->
-  <meta name="theme-color" content="#f7f7f7" />
-
-  <!-- App icon -->
+  <meta name="theme-color" content="#0078D7" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
-
-  <!-- Inline CSS -->
   <style>
     body {
       font-family: system-ui, sans-serif;
       background: #f7f7f7;
+      padding: 2em;
+      text-align: center;
+      height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
       margin: 0;
-      text-align: center;
     }
     button {
       padding: 16px 32px;
-      font-size: 1.2em;
       background: #0078D7;
-      color: white;
+      color: #fff;
       border: none;
       border-radius: 8px;
+      font-size: 16px;
       cursor: pointer;
-      z-index: 1;
-      position: relative;
     }
-    button:active { transform: scale(0.98); }
+    button:active {
+      transform: scale(0.98);
+    }
+    p {
+      margin-top: 1em;
+    }
   </style>
 </head>
-
 <body>
-  <!-- Splash div visible immediately -->
-  <div id="splash" style="background:#f7f7f7; position:absolute; top:0; left:0; width:100%; height:100%; display:flex; justify-content:center; align-items:center; z-index:10;">
-    <p style="font-size:1.2em; color:#0078D7;">Loading Copilot Studio…</p>
-  </div>
+  <h1>Copilot Studio Community</h1>
+  <p>This app will redirect you to the Copilot Studio User Group hub.</p>
+  
+  <button onclick="openCommunity()">Open Now</button>
+  
+  <p>If it doesn’t open, <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank" rel="noopener noreferrer">click here</a>.</p>
 
-  <!-- Button opens Copilot Studio Community -->
-  <button onclick="window.open(
-      'https://techcommunity.microsoft.com/group/copilot-studio-community-hub',
-      '_blank',
-      'noopener,noreferrer'
-    )">
-    Open Copilot Studio Community
-  </button>
-
-  <!-- Scripts -->
   <script>
-    // Hide splash immediately after page loads
-    window.addEventListener('load', () => {
-      const splash = document.getElementById('splash');
-      if (splash) splash.style.display = 'none';
-    });
+    function openCommunity() {
+      window.open(
+        "https://techcommunity.microsoft.com/group/copilot-studio-community-hub",
+        "_blank",
+        "noopener,noreferrer"
+      );
+    }
 
-    // Register minimal Service Worker
+    // Optional auto-redirect if running as standalone
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setTimeout(openCommunity, 3000);
+    }
+
+    // Minimal Service Worker registration
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     }
