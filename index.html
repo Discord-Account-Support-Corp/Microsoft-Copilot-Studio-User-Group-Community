@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Copilot Studio Splash</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0078D7" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0078D7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <style>
     body {
       font-family: system-ui, sans-serif;
-      background: #f7f7f7;
+      margin: 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
+      background: #f7f7f7;
       text-align: center;
     }
+    h1 { margin-bottom: 0.5em; }
+    p { margin-top: 0.5em; }
     button {
       padding: 16px 32px;
       background: #0078D7;
@@ -30,35 +32,38 @@
       cursor: pointer;
     }
     button:active { transform: scale(0.98); }
-    p { margin-top: 1em; }
+    #loading {
+      margin-top: 1em;
+      font-size: 1em;
+      color: #0078D7;
+    }
   </style>
 </head>
 <body>
   <h1>Copilot Studio Community</h1>
-  <p>Redirecting you to the Copilot Studio User Group hub.</p>
-
+  <p>Welcome! Launching your user group…</p>
   <button id="openBtn">Open Now</button>
-
-  <p>If it doesn’t open, <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank" rel="noopener noreferrer">click here</a>.</p>
+  <div id="loading">Loading...</div>
 
   <script>
-    // Function to force a robust top-level redirect
+    const hubURL = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
+
     function openCommunity() {
-      const url = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
+      // Show loading text
+      document.getElementById('loading').textContent = 'Opening your user group…';
 
-      // First attempt: new tab/window
-      const newTab = window.open(url, '_blank', 'noopener,noreferrer');
+      // Try opening in a new tab
+      const newTab = window.open(hubURL, '_blank', 'noopener,noreferrer');
 
-      // If blocked (common in standalone PWAs), use top-level redirect
+      // Fallback if blocked in standalone PWA
       if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
-        window.top.location.href = url;
+        window.top.location.href = hubURL;
       }
     }
 
-    // Button click handler
     document.getElementById('openBtn').addEventListener('click', openCommunity);
 
-    // Optional: automatically redirect after 1.5 seconds in standalone mode
+    // Auto-launch after 1.5s in standalone mode
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setTimeout(openCommunity, 1500);
     }
