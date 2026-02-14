@@ -35,19 +35,35 @@
 </head>
 <body>
   <h1>Copilot Studio Community</h1>
-  <p>This app will redirect you to the Copilot Studio User Group hub.</p>
+  <p>Redirecting you to the Copilot Studio User Group hub.</p>
 
   <button id="openBtn">Open Now</button>
 
   <p>If it doesn’t open, <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank" rel="noopener noreferrer">click here</a>.</p>
 
   <script>
-    document.getElementById('openBtn').addEventListener('click', () => {
-      // Top-level redirect avoids white screen in standalone PWA
-      window.top.location.href = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
-    });
+    // Function to force a robust top-level redirect
+    function openCommunity() {
+      const url = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
 
-    // Register minimal Service Worker
+      // First attempt: new tab/window
+      const newTab = window.open(url, '_blank', 'noopener,noreferrer');
+
+      // If blocked (common in standalone PWAs), use top-level redirect
+      if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
+        window.top.location.href = url;
+      }
+    }
+
+    // Button click handler
+    document.getElementById('openBtn').addEventListener('click', openCommunity);
+
+    // Optional: automatically redirect after 1.5 seconds in standalone mode
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setTimeout(openCommunity, 1500);
+    }
+
+    // Minimal service worker registration
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     }
