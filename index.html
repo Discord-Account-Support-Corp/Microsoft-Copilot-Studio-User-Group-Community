@@ -32,43 +32,26 @@
       cursor: pointer;
     }
     button:active { transform: scale(0.98); }
-    #loading {
-      margin-top: 1em;
-      font-size: 1em;
-      color: #0078D7;
-    }
   </style>
 </head>
 <body>
   <h1>Copilot Studio Community</h1>
   <p>Welcome! Launching your user group…</p>
+
   <button id="openBtn">Open Now</button>
-  <div id="loading">Loading...</div>
 
   <script>
-    const hubURL = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
+    // Navigate to internal redirect page
+    document.getElementById('openBtn').addEventListener('click', () => {
+      window.location.href = 'redirect.html';
+    });
 
-    function openCommunity() {
-      // Show loading text
-      document.getElementById('loading').textContent = 'Opening your user group…';
-
-      // Try opening in a new tab
-      const newTab = window.open(hubURL, '_blank', 'noopener,noreferrer');
-
-      // Fallback if blocked in standalone PWA
-      if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
-        window.top.location.href = hubURL;
-      }
-    }
-
-    document.getElementById('openBtn').addEventListener('click', openCommunity);
-
-    // Auto-launch after 1.5s in standalone mode
+    // Optional: auto-launch in standalone PWA
     if (window.matchMedia('(display-mode: standalone)').matches) {
-      setTimeout(openCommunity, 1500);
+      setTimeout(() => window.location.href = 'redirect.html', 1500);
     }
 
-    // Minimal service worker registration
+    // Register minimal service worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js');
     }
