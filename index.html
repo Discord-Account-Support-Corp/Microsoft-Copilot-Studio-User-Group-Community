@@ -2,75 +2,68 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Copilot Studio Splash</title>
+  <title>Copilot Studio Community</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0078D7">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="apple-touch-icon" href="icons/icon-192.png">
   <style>
     body {
       font-family: system-ui, sans-serif;
       margin: 0;
+      height: 100vh;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
       background: #f7f7f7;
       text-align: center;
     }
-    h1 { margin-bottom: 0.5em; }
-    p { margin-top: 0.5em; }
     button {
-      padding: 16px 32px;
-      background: #0078D7;
-      color: #fff;
+      padding: 16px 28px;
+      font-size: 16px;
       border: none;
       border-radius: 8px;
-      font-size: 16px;
+      background: #0078D7;
+      color: white;
       cursor: pointer;
     }
-    button:active { transform: scale(0.98); }
   </style>
 </head>
 <body>
-  <h1>Copilot Studio Community</h1>
-  <p>Welcome! Launching your user group…</p>
 
-  <button id="openBtn">Open Now</button>
+<div id="app">
+  Loading Copilot Studio…
+</div>
 
-  <p>If it doesn’t open automatically, <a href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub" target="_blank" rel="noopener noreferrer">click here</a>.</p>
+<script>
+const hubURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
 
-  <script>
-    const hubURL = 'https://techcommunity.microsoft.com/group/copilot-studio-community-hub';
+function openCommunity() {
+  window.location.href = hubURL;
+}
 
-    function openCommunity() {
-      // Open in new tab
-      const newTab = window.open(hubURL, '_blank', 'noopener,noreferrer');
-      // Fallback for standalone PWA
-      if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
-        window.location.href = hubURL;
-      }
-    }
+// Render UI safely
+document.getElementById("app").innerHTML = `
+  <div>
+    <h1>Copilot Studio Community</h1>
+    <button id="openBtn">Open Now</button>
+  </div>
+`;
 
-    document.getElementById('openBtn').addEventListener('click', openCommunity);
+document.getElementById("openBtn").addEventListener("click", openCommunity);
 
-    // Auto-launch in standalone PWA after 1.5s
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-      setTimeout(openCommunity, 1500);
-    }
+// Auto launch in standalone mode
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  setTimeout(openCommunity, 1200);
+}
 
-    // --- Built-in Service Worker Unregister + Register ---
-    if ('serviceWorker' in navigator) {
-      // Unregister any old SW first
-      navigator.serviceWorker.getRegistrations().then(regs =>
-        regs.forEach(reg => reg.unregister())
-      ).finally(() => {
-        // Register the new minimal SW
-        navigator.serviceWorker.register('sw.js');
-      });
-    }
-  </script>
+// Clean old service workers then register fresh one
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations()
+    .then(regs => regs.forEach(reg => reg.unregister()))
+    .finally(() => navigator.serviceWorker.register('sw.js'));
+}
+</script>
+
 </body>
 </html>
