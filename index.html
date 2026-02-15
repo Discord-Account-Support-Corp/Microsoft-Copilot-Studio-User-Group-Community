@@ -4,73 +4,19 @@
   <meta charset="UTF-8">
   <title>Copilot Studio Community</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0078D7">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #f7f7f7;
-      font-family: system-ui, sans-serif;
-      text-align: center;
-    }
-
-    .card {
-      background: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      margin-bottom: 20px;
-    }
-
-    button {
-      padding: 14px 28px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background: #0078D7;
-      color: white;
-      cursor: pointer;
-    }
-
-    button:hover {
-      opacity: 0.9;
-    }
-
-    p {
-      margin-top: 15px;
-      font-size: 14px;
-    }
-  </style>
 </head>
+<body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;">
 
-<body>
-
-<div class="card">
-  <h1>Copilot Studio Community</h1>
-  <button id="openBtn">Open Community</button>
-  <p>If nothing happens, refresh once and try again.</p>
-</div>
+<button id="openBtn" style="padding:16px 28px;font-size:16px;">
+  Open Community
+</button>
 
 <script>
 const hubURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
 
 document.getElementById("openBtn").addEventListener("click", () => {
-  window.location.href = hubURL;
+  window.open(hubURL, "_blank");
 });
-
-// Register minimal service worker safely
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
 </script>
 
 </body>
