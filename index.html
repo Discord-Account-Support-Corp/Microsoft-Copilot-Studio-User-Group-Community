@@ -5,9 +5,10 @@
   <title>Copilot Studio Community</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
-<body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;">
 
-<button id="openBtn" style="padding:16px 28px;font-size:16px;">
+<body style="margin:0;height:100vh;display:flex;justify-content:center;align-items:center;font-family:sans-serif;background:#f7f7f7;">
+
+<button id="openBtn" style="padding:16px 28px;font-size:16px;border:none;border-radius:8px;background:#0078D7;color:white;">
   Open Community
 </button>
 
@@ -15,7 +16,7 @@
 const hubURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
 
 document.getElementById("openBtn").addEventListener("click", () => {
-  window.open(hubURL, "_blank");
+  window.location.assign(hubURL);
 });
 </script>
 
