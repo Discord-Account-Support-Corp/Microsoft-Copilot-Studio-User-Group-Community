@@ -18,7 +18,6 @@
       background: #f7f7f7;
       text-align: center;
     }
-
     button {
       padding: 16px 28px;
       font-size: 16px;
@@ -28,19 +27,47 @@
       color: white;
       cursor: pointer;
     }
+    #loadingBar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      background: #0078D7;
+      transition: width 0.3s ease;
+      z-index: 100;
+      display: none;
+    }
   </style>
 </head>
 <body>
+
+<div id="loadingBar"></div>
 
 <button id="openBtn">Open Copilot Studio Community</button>
 
 <script>
 const hubURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
+const loadingBar = document.getElementById("loadingBar");
 
 document.getElementById("openBtn").addEventListener("click", () => {
-  // ✅ Open externally in system browser
-  window.open(hubURL, "_blank", "noopener,noreferrer");
+  // Show a quick loading bar for visual feedback
+  loadingBar.style.display = "block";
+  loadingBar.style.width = "50%";
+
+  setTimeout(() => {
+    loadingBar.style.width = "100%";
+    setTimeout(() => {
+      // Safe redirect: top-level navigation
+      window.top.location.href = hubURL;
+    }, 150);
+  }, 100);
 });
+
+// Minimal service worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
 </script>
 
 </body>
