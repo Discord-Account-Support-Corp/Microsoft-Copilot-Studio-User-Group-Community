@@ -19,19 +19,8 @@
       text-align: center;
     }
 
-    .card {
-      background: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      margin-bottom: 20px;
-    }
-
     button {
-      padding: 14px 28px;
+      padding: 16px 28px;
       font-size: 16px;
       border: none;
       border-radius: 8px;
@@ -39,55 +28,19 @@
       color: white;
       cursor: pointer;
     }
-
-    button:hover {
-      opacity: 0.9;
-    }
-
-    #loadingBar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 3px;
-      width: 0;
-      background: #0078D7;
-      transition: width 0.3s ease;
-      z-index: 100;
-      display: none; /* hidden until button clicked */
-    }
   </style>
 </head>
 <body>
 
-<div id="loadingBar"></div>
-
-<div class="card">
-  <h1>Copilot Studio Community</h1>
-  <button id="openBtn">Open Community</button>
-  <p>If nothing happens, refresh once and try again.</p>
-</div>
+<button id="openBtn">Open Copilot Studio Community</button>
 
 <script>
 const hubURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
-const loadingBar = document.getElementById("loadingBar");
 
 document.getElementById("openBtn").addEventListener("click", () => {
-  // Show and animate loading bar only on click
-  loadingBar.style.display = "block";
-  loadingBar.style.width = "50%";
-
-  setTimeout(() => {
-    loadingBar.style.width = "100%";
-    setTimeout(() => {
-      window.location.assign(hubURL);
-    }, 150);
-  }, 100);
+  // Open in system browser
+  window.open(hubURL, "_blank", "noopener,noreferrer");
 });
-
-// Minimal service worker registration
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
 </script>
 
 </body>
