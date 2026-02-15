@@ -7,19 +7,32 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0078D7">
   <meta name="apple-mobile-web-app-capable" content="yes">
+
   <style>
     body {
-      font-family: system-ui, sans-serif;
       margin: 0;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       background: #f7f7f7;
+      font-family: system-ui, sans-serif;
       text-align: center;
     }
+
+    .card {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
     button {
-      padding: 16px 28px;
+      padding: 14px 28px;
       font-size: 16px;
       border: none;
       border-radius: 8px;
@@ -27,41 +40,36 @@
       color: white;
       cursor: pointer;
     }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    p {
+      margin-top: 15px;
+      font-size: 14px;
+    }
   </style>
 </head>
+
 <body>
 
-<div id="app">
-  Loading Copilot Studio…
+<div class="card">
+  <h1>Copilot Studio Community</h1>
+  <button id="openBtn">Open Community</button>
+  <p>If nothing happens, refresh once and try again.</p>
 </div>
 
 <script>
 const hubURL = "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
 
-function openCommunity() {
+document.getElementById("openBtn").addEventListener("click", () => {
   window.location.href = hubURL;
-}
+});
 
-// Render UI safely
-document.getElementById("app").innerHTML = `
-  <div>
-    <h1>Copilot Studio Community</h1>
-    <button id="openBtn">Open Now</button>
-  </div>
-`;
-
-document.getElementById("openBtn").addEventListener("click", openCommunity);
-
-// Auto launch in standalone mode
-if (window.matchMedia('(display-mode: standalone)').matches) {
-  setTimeout(openCommunity, 1200);
-}
-
-// Clean old service workers then register fresh one
+// Register minimal service worker safely
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations()
-    .then(regs => regs.forEach(reg => reg.unregister()))
-    .finally(() => navigator.serviceWorker.register('sw.js'));
+  navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 </script>
 
