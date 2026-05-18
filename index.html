@@ -24,13 +24,17 @@
 
     .btn {
       padding: 16px 32px;
-      font-size: 1.2em;
+      font-size: 1.1em;
       background: #0078D7;
       color: white;
-      border-radius: 8px;
-      text-decoration: none;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
       font-weight: 600;
-      margin-top: 10px;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
     }
 
     .hint {
@@ -38,23 +42,57 @@
       font-size: 0.9em;
       color: #555;
     }
+
+    /* tiny loading bar (safe visual only) */
+    #bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: #0078D7;
+      transition: width 0.25s ease;
+    }
   </style>
 </head>
 
 <body>
 
-  <a
-    class="btn"
-    href="https://techcommunity.microsoft.com/group/copilot-studio-community-hub"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Open Copilot Studio Community
-  </a>
+<div id="bar"></div>
 
-  <div class="hint">
-    If it doesn’t open, tap again — network may be busy.
-  </div>
+<button class="btn" id="openBtn">
+  Open Copilot Studio Community
+</button>
+
+<div class="hint">
+  Opens in your device browser for best stability
+</div>
+
+<script>
+const url =
+  "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
+
+const bar = document.getElementById("bar");
+
+document.getElementById("openBtn").addEventListener("click", () => {
+  // visual feedback only (does NOT affect navigation stability)
+  bar.style.width = "40%";
+
+  setTimeout(() => {
+    bar.style.width = "100%";
+
+    setTimeout(() => {
+      // MOST STABLE NAVIGATION METHOD
+      window.location.href = url;
+    }, 150);
+  }, 120);
+});
+
+// minimal safe service worker (no caching, no interference)
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("sw.js").catch(() => {});
+}
+</script>
 
 </body>
 </html>
