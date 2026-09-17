@@ -1,98 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Copilot Studio Community</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microsoft Tech User Group</title>
 
-  <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0078D7" />
-  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="manifest" href="manifest.json">
 
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #f7f7f7;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      text-align: center;
-      flex-direction: column;
-    }
-
-    .btn {
-      padding: 16px 32px;
-      font-size: 1.1em;
-      background: #0078D7;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .btn:active {
-      transform: scale(0.98);
-    }
-
-    .hint {
-      margin-top: 15px;
-      font-size: 0.9em;
-      color: #555;
-    }
-
-    /* tiny loading bar (safe visual only) */
-    #bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 3px;
-      width: 0%;
-      background: #0078D7;
-      transition: width 0.25s ease;
-    }
-  </style>
+  <meta http-equiv="refresh"
+        content="0; url=https://techcommunity.microsoft.com/group/copilot-studio-community-hub">
 </head>
 
 <body>
-
-<div id="bar"></div>
-
-<button class="btn" id="openBtn">
-  Open Copilot Studio Community
-</button>
-
-<div class="hint">
-  Opens in your device browser for best stability
-</div>
-
-<script>
-const url =
-  "https://techcommunity.microsoft.com/group/copilot-studio-community-hub";
-
-const bar = document.getElementById("bar");
-
-document.getElementById("openBtn").addEventListener("click", () => {
-  // visual feedback only (does NOT affect navigation stability)
-  bar.style.width = "40%";
-
-  setTimeout(() => {
-    bar.style.width = "100%";
-
-    setTimeout(() => {
-      // MOST STABLE NAVIGATION METHOD
-      window.location.href = url;
-    }, 150);
-  }, 120);
-});
-
-// minimal safe service worker (no caching, no interference)
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js").catch(() => {});
-}
-</script>
-
+  <script>
+    window.location.replace(
+      "https://techcommunity.microsoft.com/group/copilot-studio-community-hub"
+    );
+  </script>
 </body>
 </html>
